@@ -2,11 +2,6 @@ FROM debian:stable
 
 WORKDIR /root
 
-COPY program ./program
-COPY flash.sh .
-RUN chmod +x flash.sh
-
-
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update container
@@ -34,7 +29,11 @@ RUN git clone --quiet https://github.com/espressif/qemu.git \
 
 RUN echo "alias idf='source /root/esp/esp-idf/export.sh'" >> .bashrc
 
+COPY program ./program
+COPY flash.sh compile.sh start.sh ./
+RUN chmod +x flash.sh compile.sh start.sh
+
+RUN ./compile.sh
 
 # Start from a Bash prompt
 CMD [ "/bin/bash" ]
-
